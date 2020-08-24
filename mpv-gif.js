@@ -73,8 +73,6 @@ function makeGifInternal(burnSubtitles) {
 
     var pathName = mp.get_property("path", "");
     var trimFilters = esc(filters);
-<<<<<<< HEAD
-=======
     if (burnSubtitles) {
 
         // Determine currently active sub track
@@ -101,7 +99,6 @@ function makeGifInternal(burnSubtitles) {
             trimFilters = trimFilters + ",subtitles=" + escForSub(pathName) + ":si=" + correctTrack;
         }
     }
->>>>>>> subtitles
 
     // Let's start by creating the palette
     var paletteArgs = [
