@@ -50,10 +50,6 @@ function makeGifInternal(burnSubtitles) {
 
     var esc = function (str) {
         return str.replace('""', '"\\""');
-<<<<<<< HEAD
-        return str.replace("\\", "/")
-=======
->>>>>>> subtitles
     }
 
     var escForSub = function (str) {
@@ -203,15 +199,8 @@ function makeGifWithSubtitles() {
     makeGifInternal(true)
 }
 
-<<<<<<< HEAD
-mp.add_key_binding("y", "set_gif_start2", setStartOfGif)
-mp.add_key_binding("Y", "set_gif_end2", setEndOfGif)
-mp.add_key_binding("Ctrl+y", "make_gif2", makeGifWithoutSubtitles)
-mp.add_key_binding("Ctrl+Y", "make_gif_with_subtitles2", makeGifWithSubtitles)
-=======
 mp.add_key_binding("g", "set_gif_start", setStartOfGif)
 mp.add_key_binding("G", "set_gif_end", setEndOfGif)
 mp.add_key_binding("Ctrl+g", "make_gif", makeGifWithoutSubtitles)
 mp.add_key_binding("Ctrl+G", "make_gif_with_subtitles", makeGifWithSubtitles)
->>>>>>> subtitles
 
