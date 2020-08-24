@@ -50,7 +50,6 @@ function makeGifInternal(burnSubtitles) {
 
     var esc = function (str) {
         return str.replace('""', '"\\""');
-        return str.replace("\\", "/")
     }
 
     var escForSub = function (str) {
@@ -70,6 +69,32 @@ function makeGifInternal(burnSubtitles) {
 
     var pathName = mp.get_property("path", "");
     var trimFilters = esc(filters);
+    if (burnSubtitles) {
+
+        // Determine currently active sub track
+
+        var i = 0;
+        var tracksCount = mp.get_property_number("track-list/count");
+        var subTracks = [];
+        
+        // Iterate through all sub tracks
+        mp.msg.info(tracksCount);
+        while (i <= tracksCount) {
+            var type = mp.get_property("track-list/" + i + "/type");
+            var selected = mp.get_property("track-list/" + i + "/selected");
+
+            // If it's a sub, save it
+            if (type == "sub") {
+                subTracks.push(selected === "yes");
+            }
+            i++;
+        }
+        if (subTracks.length > 0) {
+            var correctTrack = 0;
+            correctTrack = subTracks.indexOf(true);
+            trimFilters = trimFilters + ",subtitles=" + escForSub(pathName) + ":si=" + correctTrack;
+        }
+    }
 
     // Let's start by creating the palette
     var paletteArgs = [
@@ -113,7 +138,24 @@ function makeGifInternal(burnSubtitles) {
 
     mp.msg.info(gifName);
     
-    var gifArgs = [
+    var gifArgs = burnSubtitles ? [
+        'ffmpeg', 
+        '-v', 
+        'warning', 
+        '-ss', 
+        position.toString(), 
+        '-copyts',
+        '-t', 
+        duration.toString(), 
+        '-i', 
+        pathName, 
+        '-i', 
+        palette, 
+        "-lavfi", 
+        (trimFilters + "[x]; [x][1:v] paletteuse"), 
+        '-y', 
+        gifName
+    ] : [
         'ffmpeg', 
         '-v', 
         'warning', 
@@ -126,7 +168,7 @@ function makeGifInternal(burnSubtitles) {
         '-i', 
         palette, 
         "-lavfi", 
-        (trimFilters + "[x]; [x][1:v] paletteuse"), 
+        (trimFilters + " [x]; [x][1:v] paletteuse"), 
         '-y', 
         gifName
     ]
