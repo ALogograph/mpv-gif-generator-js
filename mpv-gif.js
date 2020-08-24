@@ -24,7 +24,6 @@ var options = {
 };
 
 var temp = mp.utils.getenv("TEMP");
-mp.msg.info(temp);
 mp.options.read_options(options, "gif");
 
 var fps = options.fps && options.fps >= 1 && options.fps <= 30 
@@ -78,7 +77,6 @@ function makeGifInternal(burnSubtitles) {
         var subTracks = [];
         
         // Iterate through all sub tracks
-        mp.msg.info(tracksCount);
         while (i <= tracksCount) {
             var type = mp.get_property("track-list/" + i + "/type");
             var selected = mp.get_property("track-list/" + i + "/selected");
@@ -117,7 +115,6 @@ function makeGifInternal(burnSubtitles) {
         args : paletteArgs,
         capture_stdout: true
     });
-    mp.msg.info(paletteArgs.join(' '));
     
     //Now, on to gif creation
 
@@ -136,7 +133,6 @@ function makeGifInternal(burnSubtitles) {
         }
     } while (true);
 
-    mp.msg.info(gifName);
     
     var gifArgs = burnSubtitles ? [
         'ffmpeg', 
@@ -177,7 +173,6 @@ function makeGifInternal(burnSubtitles) {
         args : gifArgs,
         capture_stdout: true
     });
-    mp.msg.info(gifArgs.join(' '));
     mp.osd_message("Gif successfully created");
 }
 
