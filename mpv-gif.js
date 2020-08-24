@@ -50,7 +50,10 @@ function makeGifInternal(burnSubtitles) {
 
     var esc = function (str) {
         return str.replace('""', '"\\""');
+<<<<<<< HEAD
         return str.replace("\\", "/")
+=======
+>>>>>>> subtitles
     }
 
     var escForSub = function (str) {
@@ -70,6 +73,35 @@ function makeGifInternal(burnSubtitles) {
 
     var pathName = mp.get_property("path", "");
     var trimFilters = esc(filters);
+<<<<<<< HEAD
+=======
+    if (burnSubtitles) {
+
+        // Determine currently active sub track
+
+        var i = 0;
+        var tracksCount = mp.get_property_number("track-list/count");
+        var subTracks = [];
+        
+        // Iterate through all sub tracks
+        mp.msg.info(tracksCount);
+        while (i <= tracksCount) {
+            var type = mp.get_property("track-list/" + i + "/type");
+            var selected = mp.get_property("track-list/" + i + "/selected");
+
+            // If it's a sub, save it
+            if (type == "sub") {
+                subTracks.push(selected === "yes");
+            }
+            i++;
+        }
+        if (subTracks.length > 0) {
+            var correctTrack = 0;
+            correctTrack = subTracks.indexOf(true);
+            trimFilters = trimFilters + ",subtitles=" + escForSub(pathName) + ":si=" + correctTrack;
+        }
+    }
+>>>>>>> subtitles
 
     // Let's start by creating the palette
     var paletteArgs = [
@@ -113,7 +145,33 @@ function makeGifInternal(burnSubtitles) {
 
     mp.msg.info(gifName);
     
+<<<<<<< HEAD
     var gifArgs = [
+=======
+    var gifArgs = burnSubtitles ? [
+>>>>>>> subtitles
+        'ffmpeg', 
+        '-v', 
+        'warning', 
+        '-ss', 
+        position.toString(), 
+<<<<<<< HEAD
+=======
+        '-copyts',
+>>>>>>> subtitles
+        '-t', 
+        duration.toString(), 
+        '-i', 
+        pathName, 
+        '-i', 
+        palette, 
+        "-lavfi", 
+        (trimFilters + "[x]; [x][1:v] paletteuse"), 
+        '-y', 
+        gifName
+<<<<<<< HEAD
+=======
+    ] : [
         'ffmpeg', 
         '-v', 
         'warning', 
@@ -126,9 +184,10 @@ function makeGifInternal(burnSubtitles) {
         '-i', 
         palette, 
         "-lavfi", 
-        (trimFilters + "[x]; [x][1:v] paletteuse"), 
+        (trimFilters + " [x]; [x][1:v] paletteuse"), 
         '-y', 
         gifName
+>>>>>>> subtitles
     ]
     mp.command_native({
         name : "subprocess",
@@ -157,8 +216,15 @@ function makeGifWithSubtitles() {
     makeGifInternal(true)
 }
 
+<<<<<<< HEAD
 mp.add_key_binding("y", "set_gif_start2", setStartOfGif)
 mp.add_key_binding("Y", "set_gif_end2", setEndOfGif)
 mp.add_key_binding("Ctrl+y", "make_gif2", makeGifWithoutSubtitles)
 mp.add_key_binding("Ctrl+Y", "make_gif_with_subtitles2", makeGifWithSubtitles)
+=======
+mp.add_key_binding("g", "set_gif_start", setStartOfGif)
+mp.add_key_binding("G", "set_gif_end", setEndOfGif)
+mp.add_key_binding("Ctrl+g", "make_gif", makeGifWithoutSubtitles)
+mp.add_key_binding("Ctrl+G", "make_gif_with_subtitles", makeGifWithSubtitles)
+>>>>>>> subtitles
 
