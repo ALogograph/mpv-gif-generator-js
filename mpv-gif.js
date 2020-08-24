@@ -145,20 +145,13 @@ function makeGifInternal(burnSubtitles) {
 
     mp.msg.info(gifName);
     
-<<<<<<< HEAD
-    var gifArgs = [
-=======
     var gifArgs = burnSubtitles ? [
->>>>>>> subtitles
         'ffmpeg', 
         '-v', 
         'warning', 
         '-ss', 
         position.toString(), 
-<<<<<<< HEAD
-=======
         '-copyts',
->>>>>>> subtitles
         '-t', 
         duration.toString(), 
         '-i', 
@@ -169,8 +162,6 @@ function makeGifInternal(burnSubtitles) {
         (trimFilters + "[x]; [x][1:v] paletteuse"), 
         '-y', 
         gifName
-<<<<<<< HEAD
-=======
     ] : [
         'ffmpeg', 
         '-v', 
@@ -187,7 +178,6 @@ function makeGifInternal(burnSubtitles) {
         (trimFilters + " [x]; [x][1:v] paletteuse"), 
         '-y', 
         gifName
->>>>>>> subtitles
     ]
     mp.command_native({
         name : "subprocess",
