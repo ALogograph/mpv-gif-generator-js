@@ -52,9 +52,9 @@ function makeGifInternal(burnSubtitles) {
     }
 
     var escForSub = function (str) {
-        str = str.replace("\\", "/");
-        str = str.replace(":", "\\\\:");
-        return str;
+        var withForwardSlashes = str.replace(/\\/g, "/");
+        var escapedColon = withForwardSlashes.replace(/:/g, "\\\\:");
+        return escapedColon;
     }
 
     var fileExists = function (str) {
@@ -198,4 +198,3 @@ mp.add_key_binding("g", "set_gif_start", setStartOfGif)
 mp.add_key_binding("G", "set_gif_end", setEndOfGif)
 mp.add_key_binding("Ctrl+g", "make_gif", makeGifWithoutSubtitles)
 mp.add_key_binding("Ctrl+G", "make_gif_with_subtitles", makeGifWithSubtitles)
-
