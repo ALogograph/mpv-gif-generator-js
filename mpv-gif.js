@@ -2,7 +2,6 @@
 Original by Ruin0x11
 Ported to Windows by Scheliux, Dragoner7
 Ported to Javascript by Lee Xavier
-
 Create animated GIFs with mpv
 Requires ffmpeg.
 Adapted from http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
@@ -83,14 +82,27 @@ function makeGifInternal(burnSubtitles) {
 
             // If it's a sub, save it
             if (type == "sub") {
-                subTracks.push(selected === "yes");
+                subTracks.push({
+                    selected: selected === "yes",
+                    external: mp.get_property("track-list/" + i + "/external"),
+                    title: mp.get_property("track-list/" + i + "/title"),
+                });
             }
             i++;
         }
         if (subTracks.length > 0) {
             var correctTrack = 0;
-            correctTrack = subTracks.indexOf(true);
-            trimFilters = trimFilters + ",subtitles=" + escForSub(pathName) + ":si=" + correctTrack;
+            correctTrack = subTracks.reduce(function(acc, val, idx) {
+                if (val.selected) {
+                    acc.push(idx)
+                }
+                return acc;
+            }, []).pop();
+            mp.msg.log("info", mp.get_property("working-directory"));
+            var subtitlePath = subTracks[correctTrack].external 
+                ? escForSub(mp.utils.join_path(mp.get_property("working-directory"), subTracks[correctTrack]["title"]))
+                : escForSub(pathName) + ":si=" + correctTrack;
+            trimFilters = trimFilters + ",subtitles=" + subtitlePath;
         }
     }
 
@@ -173,7 +185,7 @@ function makeGifInternal(burnSubtitles) {
         args : gifArgs,
         capture_stdout: true
     });
-    mp.osd_message("Gif successfully created");
+    mp.osd_message("Gif successfully created!");
 }
 
 function setStartOfGif() {
